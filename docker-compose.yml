@@ -1,0 +1,8 @@
+version: "3"
+services:
+  app:
+    build: .
+    ports:
+      - "20018:20018"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
