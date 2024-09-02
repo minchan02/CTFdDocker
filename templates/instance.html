@@ -1,67 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <style>
-      /* 버튼 스타일 추가 */
-      .button {
-        padding: 10px 20px;
-        margin: 5px;
-        background-color: #4caf50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-      .button:hover {
-        background-color: #45a049;
-      }
-      .button:disabled {
-        background-color: #9e9e9e;
-        cursor: not-allowed;
-      }
-      /* 문구 스타일 추가 */
-      .message {
-        margin-top: 10px;
-        font-size: 16px;
-        color: #333;
-      }
-    </style>
-  </head>
-  <body>
-    <a href="http://haf.world:{{port}}">http://haf.world:{{port}}</a>
-    <a>으로 접속해주세요</a>
-    <div>인스턴스 지속 시간은 30분입니다.</div>
-    {% if notice %}
-    <div class="message">{{ notice }}</div>
-    {% endif %}
-    <form
-      id="restartForm"
-      action="/restart"
-      method="post"
-      enctype="multipart/form-data"
-    >
-      <input
-        class="button"
-        id="submitButton"
-        type="submit"
-        value="인스턴스 재생성하기"
-      />
-    </form>
-    <div id="message" class="message" style="display: none">
-      재생성되는동안 화면을 나가지 말고 조금만 기다려주세요...
-    </div>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<style>
+			/* 버튼 스타일 추가 */
+			.button {
+				padding: 10px 20px;
+				margin: 5px;
+				background-color: #4caf50;
+				color: white;
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+				width: 150px; /* 버튼의 너비를 동일하게 지정 */
+				text-align: center; /* 텍스트를 수평 가운데 정렬 */
+				line-height: 20px; /* 텍스트 높이 조정 */
+				vertical-align: middle; /* 텍스트 수직 가운데 정렬 */
+			}
+			.button:hover {
+				background-color: #45a049;
+			}
+			.button:disabled {
+				background-color: #9e9e9e;
+				cursor: not-allowed;
+			}
+			/* 문구 스타일 추가 */
+			.message {
+				margin-top: 10px;
+				font-size: 16px;
+				color: #333;
+			}
+			/* 버튼들을 가로로 나란히 배치 */
+			.button-container {
+				display: flex;
+				gap: 10px; /* 버튼 사이의 간격 */
+				align-items: center; /* 버튼 내부 텍스트 수직 가운데 정렬 */
+			}
+		</style>
+	</head>
+	<body>
+		<a href="http://haf.world:{{port}}">http://haf.world:{{port}}</a>
+		<a>으로 접속해주세요</a>
+		<div>인스턴스 지속 시간은 30분입니다.</div>
+		{% if notice %}
+		<div class="message">{{ notice }}</div>
+		{% endif %}
+		<form
+			id="restartForm"
+			action="/{{docker_image}}/restart"
+			method="post"
+			enctype="multipart/form-data"
+		>
+			<input
+				class="button"
+				id="submitButton"
+				type="submit"
+				value="인스턴스 재생성하기"
+			/>
+		</form>
+		<form
+			id="deleteForm"
+			action="/{{docker_image}}/delete"
+			method="post"
+			enctype="multipart/form-data"
+		>
+			<input
+				class="button"
+				id="submitButton2"
+				type="submit"
+				value="인스턴스 삭제하기"
+			/>
+		</form>
+		<div id="message" class="message" style="display: none">
+			재생성되는동안 화면을 나가지 말고 조금만 기다려주세요...
+		</div>
+		<div id="message2" class="message" style="display: none">
+			삭제되는동안 화면을 나가지 말고 조금만 기다려주세요...
+		</div>
 
-    <script>
-      document
-        .getElementById("restartForm")
-        .addEventListener("submit", function (event) {
-          var submitButton = document.getElementById("submitButton");
-          submitButton.disabled = true;
-          document.getElementById("message").style.display = "block";
-        });
-    </script>
-  </body>
+		<script>
+			document
+				.getElementById('restartForm')
+				.addEventListener('submit', function (event) {
+					var submitButton = document.getElementById('submitButton');
+					var submitButton2 = document.getElementById('submitButton2');
+					submitButton.disabled = true;
+					submitButton2.disabled = true;
+					document.getElementById('message').style.display = 'block';
+				});
+			document
+				.getElementById('deleteForm')
+				.addEventListener('submit', function (event) {
+					var submitButton = document.getElementById('submitButton');
+					var submitButton2 = document.getElementById('submitButton2');
+					submitButton.disabled = true;
+					submitButton2.disabled = true;
+					document.getElementById('message2').style.display = 'block';
+				});
+		</script>
+	</body>
 </html>
