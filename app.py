@@ -12,10 +12,10 @@ session_dict = {} # 세션 : port
 container_dict = {} # 세션 : [이미지, 컨테이너]
 timer_dict = {} # 세션 : 타이머
 last_restart_time = {}  # 세션 : 마지막 재생성 시간
-docker_dict = {"svgphoto" : ["kmc0487/svgphoto", 8000]} # 도커이미지 : [이미지이름, 포트]
+docker_dict = {"svgphoto" : ["kmc0487/svgphoto", 8000]} # 문제이름 : [이미지이름, 포트]
 
 # 포트 범위
-PORT_RANGE_START = 21000
+PORT_RANGE_START = 21001
 PORT_RANGE_END = 21200
 
 # 컨테이너 지속 시간 (초단위)
@@ -66,10 +66,13 @@ def start_new_container(session_id, docker_image):
     try:
         container = docker_client.containers.run(
             docker_dict[docker_image][0], 
+            name=f'ctfd-{docker_image}-{port-21000}',
             detach=True,
             ports={f'{docker_dict[docker_image][1]}/tcp': port}
         )
-    except:
+        
+    except Exception as e:
+        print(e)
         return "Error start Container! Admin에게 연락해주세요", None
 
     # 세션 및 포트 정보 저장

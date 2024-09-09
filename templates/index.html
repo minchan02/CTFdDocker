@@ -23,11 +23,16 @@
 				cursor: not-allowed;
 			}
 			/* 문구 스타일 추가 */
-			.message {
+			.hidden-message {
 				margin-top: 10px;
 				font-size: 16px;
 				color: #333;
 				display: none; /* 초기에는 보이지 않음 */
+			}
+			.message {
+				margin-top: 10px;
+				font-size: 16px;
+				color: #333;
 			}
 		</style>
 	</head>
@@ -45,7 +50,10 @@
 				value="인스턴스 생성하기"
 			/>
 		</form>
-		<div id="message" class="message">조금만 기다려주세요...</div>
+		<div id="message" class="message">
+			도커 인스턴스를 생성하는 페이지입니다 이 페이지는 공격하지 말아주세요!
+		</div>
+		<div id="hidden-message" class="hidden-message">조금만 기다려주세요...</div>
 
 		<script>
 			document
@@ -55,7 +63,7 @@
 					var submitButton = document.getElementById('submitButton');
 					submitButton.disabled = true;
 					// 문구를 표시
-					document.getElementById('message').style.display = 'block';
+					document.getElementById('hidden-message').style.display = 'block';
 				});
 		</script>
 	</body>
