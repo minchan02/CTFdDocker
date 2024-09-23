@@ -9,10 +9,10 @@ app = Flask(__name__)
 docker_client = from_env()
 
 session_dict = {} # 세션 : port 
-container_dict = {} # 세션 : [이미지, 컨테이너]
+container_dict = {} # 세션 : [컨테이너id, 이미지]
 timer_dict = {} # 세션 : 타이머
 last_restart_time = {}  # 세션 : 마지막 재생성 시간
-docker_dict = {"svgphoto" : ["kmc0487/svgphoto", 8000]} # 문제이름 : [이미지이름, 포트]
+docker_dict = {"svgphoto" : ["kmc0487/svgphoto", 8000], "log4you" : ["kmc0487/log4j_2.15",8080]} # 문제이름 : [이미지이름, 포트]
 
 # 포트 범위
 PORT_RANGE_START = 21001
@@ -105,14 +105,14 @@ def index(docker_image):
     if(request.method=='GET'):
         if not session_id:
             return "워게임 사이트 로그인을 해주세요"
-    
-        if session_id in session_dict.keys():
+        
+        if session_id in container_dict.keys() and (docker_image in container_dict[session_id][1]):
             port = session_dict[session_id]
             return render_template('instance.html', port=port, notice = None, docker_image=docker_image)
         else:
             return render_template('index.html', docker_image=docker_image)
     elif(request.method =='POST'):
-        if session_id in session_dict.keys():
+        if session_id in container_dict.keys() and (docker_image in container_dict[session_id][1]):
             port = session_dict[session_id]
             return render_template('instance.html', port=port, notice = None, docker_image=docker_image)
         last_restart_time[session_id] = datetime.now()
